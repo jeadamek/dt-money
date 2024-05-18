@@ -1,5 +1,5 @@
 import { Header } from "../../components/Header";
-import { SearchForm } from "../../components/Header/SearchForm";
+import { SearchForm } from "./components/SearchForm";
 import { Summary } from "../../components/Summary";
 
 import { PriceHightlight, TransactionsContainer, TransactionsTable } from "./styles";
