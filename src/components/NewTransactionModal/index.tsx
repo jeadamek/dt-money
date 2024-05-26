@@ -1,10 +1,10 @@
-import * as z from "zod";
-import { useContext } from "react";
-import * as Dialog from "@radix-ui/react-dialog";
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from 'zod'
+import { useContext } from 'react'
+import * as Dialog from '@radix-ui/react-dialog'
+import { Controller, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 
-import { TransactionsContext } from "../../contexts/TransactionsContext";
+import { TransactionsContext } from '../../contexts/TransactionsContext'
 
 import {
   CloseButton,
@@ -12,22 +12,22 @@ import {
   Overlay,
   TransactionType,
   TransactionTypeButton,
-} from "./styles";
-import { ArrowCircleDown, ArrowCircleUp, X } from "phosphor-react";
+} from './styles'
+import { ArrowCircleDown, ArrowCircleUp, X } from 'phosphor-react'
 
 const newTransactionFormSchema = z.object({
   description: z.string(),
   price: z.number(),
   category: z.string(),
-  type: z.enum(["income", "outcome"]),
-});
+  type: z.enum(['income', 'outcome']),
+})
 
-type NewTransactionFormInputs = z.infer<typeof newTransactionFormSchema>;
+type NewTransactionFormInputs = z.infer<typeof newTransactionFormSchema>
 
 export function NewTransactionModal() {
-  const { createTransaction } = useContext(TransactionsContext);
+  const { createTransaction } = useContext(TransactionsContext)
 
-  const { 
+  const {
     control,
     register,
     handleSubmit,
@@ -35,20 +35,20 @@ export function NewTransactionModal() {
     reset,
   } = useForm<NewTransactionFormInputs>({
     resolver: zodResolver(newTransactionFormSchema),
-  });
+  })
 
   async function handleCreateNewTransaction(data: NewTransactionFormInputs) {
-    const { description, price, category, type } = data;
+    const { description, price, category, type } = data
 
     await createTransaction({
       description,
       price,
       category,
-      type
-    });
+      type,
+    })
 
-    reset();
-  } 
+    reset()
+  }
 
   return (
     <Dialog.Portal>
@@ -62,32 +62,32 @@ export function NewTransactionModal() {
         </CloseButton>
 
         <form onSubmit={handleSubmit(handleCreateNewTransaction)}>
-          <input 
-            type="text" 
-            placeholder="Descrição"  
-            required 
+          <input
+            type="text"
+            placeholder="Descrição"
+            required
             {...register('description')}
           />
-          <input 
-            type="text" 
-            placeholder="Valor"  
-            required 
-            {...register('price', { valueAsNumber: true } )}
+          <input
+            type="text"
+            placeholder="Valor"
+            required
+            {...register('price', { valueAsNumber: true })}
           />
-          <input 
-            type="text" 
-            placeholder="Categoria"  
-            required 
+          <input
+            type="text"
+            placeholder="Categoria"
+            required
             {...register('category')}
           />
 
-          <Controller 
-            control={control} 
-            name="type" 
-            render={({ field }) => { 
+          <Controller
+            control={control}
+            name="type"
+            render={({ field }) => {
               return (
-                <TransactionType 
-                  onValueChange={field.onChange} 
+                <TransactionType
+                  onValueChange={field.onChange}
                   value={field.value}
                 >
                   <TransactionTypeButton value="income">
@@ -101,13 +101,14 @@ export function NewTransactionModal() {
                   </TransactionTypeButton>
                 </TransactionType>
               )
-            }}  
+            }}
           />
 
-
-          <button disabled={isSubmitting} type="submit">Cadastrar</button>
+          <button disabled={isSubmitting} type="submit">
+            Cadastrar
+          </button>
         </form>
       </Content>
     </Dialog.Portal>
-  );
+  )
 }
