@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import * as Dialog from "@radix-ui/react-dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -23,6 +23,7 @@ type NewTransactionFormInputs = z.infer<typeof newTransactionFormSchema>;
 
 export function NewTransactionModal() {
   const { 
+    control,
     register,
     handleSubmit,
     formState: { isSubmitting }
@@ -67,17 +68,29 @@ export function NewTransactionModal() {
             {...register('category')}
           />
 
-          <TransactionType>
-            <TransactionTypeButton value="income">
-              <ArrowCircleUp size={24} />
-              Entrada
-            </TransactionTypeButton>
+          <Controller 
+            control={control} 
+            name="type" 
+            render={({ field }) => { 
+              return (
+                <TransactionType 
+                  onValueChange={field.onChange} 
+                  value={field.value}
+                >
+                  <TransactionTypeButton value="income">
+                    <ArrowCircleUp size={24} />
+                    Entrada
+                  </TransactionTypeButton>
 
-            <TransactionTypeButton value="outcome">
-              <ArrowCircleDown size={24} />
-              Saída
-            </TransactionTypeButton>
-          </TransactionType>
+                  <TransactionTypeButton value="outcome">
+                    <ArrowCircleDown size={24} />
+                    Saída
+                  </TransactionTypeButton>
+                </TransactionType>
+              )
+            }}  
+          />
+
 
           <button disabled={isSubmitting} type="submit">Cadastrar</button>
         </form>
